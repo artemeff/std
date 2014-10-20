@@ -47,6 +47,15 @@ to_list(I) when is_integer(I) ->
 to_list(L) when is_list(L) ->
     L.
 
+to_atom(A) when is_atom(A) ->
+    A;
+to_atom(B) when is_binary(B) ->
+    to_atom(?b2l(B));
+to_atom(I) when is_integer(I) ->
+    to_atom(?i2l(I));
+to_atom(L) when is_list(L) ->
+    ?l2a(L).
+
 %%
 %% Test
 %%
@@ -76,5 +85,12 @@ to_list_test() ->
     ?assertEqual("list", to_list("list")),
     ?assertEqual("list", to_list(<<"list">>)),
     ?assertEqual("list", to_list(list)),
+    ?assertEqual("1",    to_list(1)).
+
+to_atom_test() ->
+    ?assertEqual(atom, to_atom(atom)),
+    ?assertEqual(atom, to_atom(<<"atom">>)),
+    ?assertEqual(atom, to_atom("atom")),
+    ?assertEqual('1',  to_atom(1)).
 
 -endif.
