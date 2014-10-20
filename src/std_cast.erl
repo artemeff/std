@@ -17,6 +17,18 @@ to_integer(L) when is_list(L) ->
         Int         -> Int
     end.
 
+to_float(F) when is_float(F) ->
+    F;
+to_float(A) when is_atom(A) ->
+    to_float(?a2l(A));
+to_float(B) when is_binary(B) ->
+    to_float(?b2l(B));
+to_float(L) when is_list(L) ->
+    case catch ?l2f(L) of
+        {'EXIT', _} -> throw({error, {not_a_valid_integer, L}});
+        Float       -> Float
+    end.
+
 to_binary(B) when is_binary(B) ->
     B;
 to_binary(L) when is_list(L) ->
@@ -48,6 +60,12 @@ to_integer_test() ->
     ?assertEqual(1, to_integer("1")),
     ?assertEqual(1, to_integer(<<"1">>)).
 
+to_float_test() ->
+    ?assertEqual(1.1, to_float(1.1)),
+    ?assertEqual(1.1, to_float('1.1')),
+    ?assertEqual(1.1, to_float("1.1")),
+    ?assertEqual(1.1, to_float(<<"1.1">>)).
+
 to_binary_test() ->
     ?assertEqual(<<"bin">>, to_binary(<<"bin">>)),
     ?assertEqual(<<"bin">>, to_binary("bin")),
@@ -58,6 +76,5 @@ to_list_test() ->
     ?assertEqual("list", to_list("list")),
     ?assertEqual("list", to_list(<<"list">>)),
     ?assertEqual("list", to_list(list)),
-    ?assertEqual("1", to_list(1)).
 
 -endif.
