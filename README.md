@@ -1,4 +1,4 @@
-### std
+### std [![Build Status](https://secure.travis-ci.org/artemeff/std.png)](http://travis-ci.org/artemeff/std)
 
 ---
 
