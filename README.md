@@ -2,7 +2,7 @@
 
 ---
 
-Custom Erlang STDLIB:
+Additions to the Erlang STDLIB:
 
 * std_cache
 
