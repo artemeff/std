@@ -7,6 +7,8 @@
 
 to_integer(I) when is_integer(I) ->
     I;
+to_integer(A) when is_atom(A) ->
+    to_integer(?a2l(A));
 to_integer(B) when is_binary(B) ->
     to_integer(?b2l(B));
 to_integer(L) when is_list(L) ->
@@ -42,6 +44,7 @@ to_list(L) when is_list(L) ->
 
 to_integer_test() ->
     ?assertEqual(1, to_integer(1)),
+    ?assertEqual(1, to_integer('1')),
     ?assertEqual(1, to_integer("1")),
     ?assertEqual(1, to_integer(<<"1">>)).
 
