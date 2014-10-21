@@ -1,8 +1,10 @@
 -module(std_cast).
 -include("std.hrl").
 -export([ to_integer/1
+        , to_float/1
         , to_binary/1
         , to_list/1
+        , to_atom/1
         ]).
 
 to_integer(I) when is_integer(I) ->
@@ -11,12 +13,16 @@ to_integer(A) when is_atom(A) ->
     to_integer(?a2l(A));
 to_integer(B) when is_binary(B) ->
     to_integer(?b2l(B));
+to_integer(F) when is_float(F) ->
+    round(F);
 to_integer(L) when is_list(L) ->
     case catch ?l2i(L) of
         {'EXIT', _} -> throw({error, {not_a_valid_integer, L}});
         Int         -> Int
     end.
 
+to_float(I) when is_integer(I) ->
+    I / 1;
 to_float(F) when is_float(F) ->
     F;
 to_float(A) when is_atom(A) ->
@@ -65,11 +71,13 @@ to_atom(L) when is_list(L) ->
 
 to_integer_test() ->
     ?assertEqual(1, to_integer(1)),
+    ?assertEqual(1, to_integer(1.1)),
     ?assertEqual(1, to_integer('1')),
     ?assertEqual(1, to_integer("1")),
     ?assertEqual(1, to_integer(<<"1">>)).
 
 to_float_test() ->
+    ?assertEqual(1.0, to_float(1)),
     ?assertEqual(1.1, to_float(1.1)),
     ?assertEqual(1.1, to_float('1.1')),
     ?assertEqual(1.1, to_float("1.1")),
