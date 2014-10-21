@@ -1,12 +1,16 @@
 -module(std).
--export([ timestamp/0
+-export([ timestamp/0, timestamp/1
         , priv_dir/1
         ]).
 
 -spec timestamp()
    -> non_neg_integer().
 timestamp() ->
-    {Mega, Seconds, _} = now(),
+    timestamp(now()).
+
+-spec timestamp(erlang:timestamp())
+   -> non_neg_integer().
+timestamp({Mega, Seconds, _}) ->
     Mega * 1000000 + Seconds.
 
 -spec priv_dir(atom())
