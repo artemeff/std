@@ -3,6 +3,8 @@
         , priv_dir/1
         ]).
 
+-spec timestamp()
+   -> non_neg_integer().
 timestamp() ->
     {Mega, Seconds, _} = now(),
     Mega * 1000000 + Seconds.
