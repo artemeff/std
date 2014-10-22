@@ -1,6 +1,6 @@
 -module(std_cache).
 -export([ init/0
-        , get/1
+        , get/1, get/2
         , set/2, set/3
         , delete/1
         , flush/0
@@ -29,23 +29,28 @@ init() ->
         ]), ok.
 
 -spec get(key())
-   -> {ok, val()} | {error, not_found}.
+   -> val() | undefined.
 get(Key) ->
+    get(Key, undefined).
+
+-spec get(key(), any())
+   -> val() | any().
+get(Key, Default) ->
     case ets:lookup(?MODULE, Key) of
-        [{Key, R}] -> {ok, R};
-        _          -> {error, not_found}
+        [{Key, R}] -> R;
+        _          -> Default
     end.
 
 -spec set(key(), val_fun())
-   -> {exist, val()} | {new, val()}.
+   -> val().
 set(Key, Fun) ->
     set(Key, Fun, 0).
 
 -spec set(key(), val_fun(), ttl())
-   -> {exist, val()} | {new, val()}.
+   -> val().
 set(Key, Fun, TTL) ->
     case ets:lookup(?MODULE, Key) of
-        [{Key, R}] -> {exist, R};
+        [{Key, R}] -> R;
         _ ->
             Value = Fun(),
             ets:insert(?MODULE, {Key, Value}),
@@ -54,7 +59,7 @@ set(Key, Fun, TTL) ->
                 TTL ->
                     timer:apply_after(TTL, ?MODULE, delete, [Key])
             end,
-            {new, Value}
+            Value
   end.
 
 -spec delete(key())

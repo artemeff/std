@@ -16,27 +16,29 @@ stop(_) -> std_cache:flush().
 %%
 
 set_on_one_key() ->
-    ?assertMatch({new, value},
+    ?assertMatch(value,
         std_cache:set(set_on_one_key, fun() -> value end)),
-    ?assertMatch({exist, value},
+    ?assertMatch(value,
         std_cache:set(set_on_one_key, fun() -> value end)).
 
 set_with_ttl() ->
-    ?assertMatch({new, value},
+    ?assertMatch(value,
         std_cache:set(set_with_ttl, fun() -> value end, 500)),
-    ?assertMatch({ok, value},
+    ?assertMatch(value,
         std_cache:get(set_with_ttl)),
     receive after 600 ->
-        ?assertMatch({error, not_found},
+        ?assertMatch(undefined,
             std_cache:get(set_with_ttl))
     end.
 
 set_get_flush_get() ->
-    ?assertMatch({new, value},
+    ?assertMatch(value,
         std_cache:set(set_get_flush_get, fun() -> value end)),
-    ?assertMatch({ok, value},
+    ?assertMatch(value,
         std_cache:get(set_get_flush_get)),
     ?assertMatch(true,
         std_cache:delete(set_get_flush_get)),
-    ?assertMatch({error, not_found},
-        std_cache:get(set_get_flush_get)).
+    ?assertMatch(undefined,
+        std_cache:get(set_get_flush_get)),
+    ?assertMatch(undef,
+        std_cache:get(set_get_flush_get, undef)).
