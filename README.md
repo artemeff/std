@@ -2,9 +2,30 @@
 
 ---
 
-Additions to the Erlang STDLIB:
+### std
 
-* std_cache
+### std_fn
+
+```erlang
+% function composition
+Fn1 = std_fn:compose(
+    [ fun(X) -> X + 3 end
+    , fun(X) -> X * 4 end
+    , fun(X) -> X - 2 end
+    ]),
+50 = Fn1(10),
+62 = Fn1(13).
+
+% partial application
+Fn2 = std_fn:partial(fun lists:foldl/3,
+    [fun(X, Acc) -> X * Acc end, 1]),
+100 = Fn2([2, 5, 10]).
+
+Fn3 = std_fn:partial(fun lists:foldl/3,
+    [fun(X, Acc) -> X + Acc end]),
+7 = Fn2(-10, [2, 5, 10]).
+```
+
 
 ---
 
