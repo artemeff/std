@@ -4,6 +4,22 @@
 
 ### std
 
+```erlang
+% TODO
+```
+
+### std_cache
+
+```erlang
+% TODO
+```
+
+### std_cast
+
+```erlang
+% TODO
+```
+
 ### std_fn
 
 ```erlang
@@ -26,6 +42,11 @@ Fn3 = std_fn:partial(fun lists:foldl/3,
 7 = Fn2(-10, [2, 5, 10]).
 ```
 
+### std_pgsql
+
+```
+% TODO
+```
 
 ---
 
