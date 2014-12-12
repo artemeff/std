@@ -2,6 +2,7 @@
 -include("std.hrl").
 -export([ to_integer/1
         , to_float/1
+        , to_number/1
         , to_binary/1
         , to_list/1
         , to_atom/1
@@ -33,6 +34,20 @@ to_float(L) when is_list(L) ->
     case catch ?l2f(L) of
         {'EXIT', _} -> throw({error, {no_float, L}});
         Float       -> Float
+    end.
+
+to_number(I) when is_integer(I) ->
+    I;
+to_number(F) when is_float(F) ->
+    F;
+to_number(A) when is_atom(A) ->
+    to_number(?a2l(A));
+to_number(B) when is_binary(B) ->
+    to_number(?b2l(B));
+to_number(L) when is_list(L) ->
+    case string:to_float(L) of
+        {error, no_float} -> list_to_integer(L);
+        {F, _Rest} -> F
     end.
 
 to_binary(B) when is_binary(B) ->
@@ -82,6 +97,16 @@ to_float_test() ->
     ?assertEqual(1.1, to_float('1.1')),
     ?assertEqual(1.1, to_float("1.1")),
     ?assertEqual(1.1, to_float(<<"1.1">>)).
+
+to_number_test() ->
+    ?assertEqual(1,   to_number(1)),
+    ?assertEqual(1.1, to_number(1.1)),
+    ?assertEqual(1,   to_number('1')),
+    ?assertEqual(1.1, to_number('1.1')),
+    ?assertEqual(1,   to_number("1")),
+    ?assertEqual(1.1, to_number("1.1")),
+    ?assertEqual(1  , to_number(<<"1">>)),
+    ?assertEqual(1.1, to_number(<<"1.1">>)).
 
 to_binary_test() ->
     ?assertEqual(<<"bin">>, to_binary(<<"bin">>)),
