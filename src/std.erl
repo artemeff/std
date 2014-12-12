@@ -1,6 +1,7 @@
 -module(std).
 -export([ timestamp/0, timestamp/1
         , priv_dir/1
+        , seconds_in/1
         , generate_random_string/1
         ]).
 
@@ -13,6 +14,14 @@ timestamp() ->
    -> non_neg_integer().
 timestamp({Mega, Seconds, _}) ->
     Mega * 1000000 + Seconds.
+
+-spec seconds_in(atom())
+   -> non_neg_integer().
+seconds_in(minute) -> 60;
+seconds_in(hour)   -> seconds_in(minute) * 60;
+seconds_in(day)    -> seconds_in(hour) * 24;
+seconds_in(week)   -> seconds_in(day) * 7;
+seconds_in(_)      -> 1.
 
 -spec priv_dir(atom())
    -> string().
