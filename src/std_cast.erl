@@ -17,7 +17,7 @@ to_integer(F) when is_float(F) ->
     round(F);
 to_integer(L) when is_list(L) ->
     case catch ?l2i(L) of
-        {'EXIT', _} -> throw({error, {not_a_valid_integer, L}});
+        {'EXIT', _} -> throw({error, {no_integer, L}});
         Int         -> Int
     end.
 
@@ -31,7 +31,7 @@ to_float(B) when is_binary(B) ->
     to_float(?b2l(B));
 to_float(L) when is_list(L) ->
     case catch ?l2f(L) of
-        {'EXIT', _} -> throw({error, {not_a_valid_integer, L}});
+        {'EXIT', _} -> throw({error, {no_float, L}});
         Float       -> Float
     end.
 
