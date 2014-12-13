@@ -1,10 +1,18 @@
 -module(std).
--export([ timestamp/0, timestamp/1
+-export([ start/0
+        , stop/0
+        , timestamp/0, timestamp/1
         , priv_dir/1
         , seconds_in/1
         , generate_random_string/1
         , chunk_list/2, chunk_list/3
         ]).
+
+start() ->
+  application:start(std).
+
+stop() ->
+  application:stop(std).
 
 -spec timestamp()
    -> non_neg_integer().
