@@ -38,7 +38,7 @@ load_app_config({App, PList}) ->
 
 env_config_file() ->
     Env = std_env:get(),
-    io_lib:format("config/~p.config", [Env]).
+    io_lib:format("config/environment/~p.config", [Env]).
 
 load_config_file(Path) ->
     case file:consult(Path) of
