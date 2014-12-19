@@ -46,7 +46,7 @@ result_to_agg({error, Msg}) -> {error, Msg}.
 %%
 
 kv_to_hstore_string({K, V}) ->
-    io_lib:format("~s => ~s", [std_cast:to_list(K), std_cast:to_list(V)]).
+    io_lib:format("~s => ~p", [std_cast:to_list(K), V]).
 
 extract_column_names(Columns) ->
     lists:map(fun({column,Name,_,_,_,_}) ->
@@ -61,8 +61,8 @@ extract_column_names(Columns) ->
 -include_lib("eunit/include/eunit.hrl").
 
 params_to_hstore_test() ->
-    ?assertEqual("a => b, c => 1", params_to_hstore([{a, "b"}, {<<"c">>, 1}])),
-    ?assertEqual("a => b, c => 1", params_to_hstore(#{a => "b", <<"c">> => 1})).
+    ?assertEqual("a => \"b\", c => 1", params_to_hstore([{a, "b"}, {<<"c">>, 1}])),
+    ?assertEqual("a => \"b\", c => 1.12", params_to_hstore(#{a => "b", <<"c">> => 1.12})).
 
 result_data() ->
     {ok,
