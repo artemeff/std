@@ -22,11 +22,15 @@
 -spec init()
    -> ok.
 init() ->
-    ?MODULE = ets:new(?MODULE,
-        [ named_table, public
-        , {read_concurrency, true}
-        , {write_concurrency, true}
-        ]), ok.
+    case ets:info(?MODULE) of
+      undefined ->
+        ?MODULE = ets:new(?MODULE,
+            [ named_table, public
+            , {read_concurrency, true}
+            , {write_concurrency, true}
+            ]), ok;
+      _Any -> ok
+    end.
 
 -spec get(key())
    -> val() | undefined.
